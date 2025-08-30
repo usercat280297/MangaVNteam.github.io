@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vượt quá giới hạn tình yêu - Season 2</title>
+
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="icon" type="image/png" href="assets/Screenshot 2025-08-26 175059.png">
+  <style>
+    /* chỉnh lại hero cao hơn */
+    .hero {
+      position: relative;
+      height: 65vh; /* cao hơn để dễ chèn ảnh */
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<!-- Scroll-to-top button -->
+<div id="scrollTop" class="scroll-top">↑</div>
+
+<script>
+  const scrollBtn = document.getElementById("scrollTop");
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 250) {
+      scrollBtn.classList.add("show");
+    } else {
+      scrollBtn.classList.remove("show");
+    }
+  });
+  scrollBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+<body>
+  <!-- favicon góc trái (home) -->
+  <img src="assets/Screenshot 2025-08-26 175059.png" class="favicon-home" alt="Home" onclick="location.href='index.html'">
+
+  <!-- HERO: 1/3 phía trên, có background -->
+  <header class="hero" style="background-image:url('assets/ewre-gigapixel-cgi-4x.png');">
+    <div class="overlay"></div>
+  </header>
+
+  <main class="container">
+    <section class="meta">
+      <img class="cover-small" src="assets/Screenshot 2025-08-26 211229 (1).png" alt="Cover">
+      <div>
+        <h1>Vượt quá giới hạn tình yêu-season 2</h1>
+        <p class="desc"><strong>Nội dung:</strong> Mười một năm trước, anh trở thành chủ sở hữu một tòa nhà do cáo phó của cha anh đã bỏ rơi gia đình anh. Một ngày nọ, một người phụ nữ bí ẩn đến với cô ấy đòi quyền thừa kế chung và bắt đầu một cuộc sống chung rắc rối giữa hai người .. Câu chuyện tình lãng mạn vượt quá giới hạn giữa ông chủ nhút nhát thực sự và và người phụ nữ bí ẩn đó sắp vượt quá giới hạn!!!</p>
+        <p class="info"><strong>Ngôn ngữ:</strong> Tiếng Việt · <strong>Thể loại:</strong> Romance manhwa fullcolor 18+</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Danh sách chương</h2>
+      <div id="chapters" class="chapters-list">Đang tải...</div>
+    </section>
+  </main>
+
+  <footer class="foot">Made with ❤️</footer>
+
+  <script>
+  async function loadChapters(){
+    try {
+      const res = await fetch('chapters/chapters.json');
+      const list = await res.json();
+      const wrap = document.getElementById('chapters');
+      wrap.innerHTML = '';
+      for(const c of list){
+        const meta = await fetch(c.path + 'chapter.json').then(r=>r.json());
+        const el = document.createElement('div');
+        el.className = 'chapter-card';
+        el.innerHTML = `
+          <div class="thumb">
+            <img src="${meta.thumbnail || 'assets/1.png'}" alt="thumb">
+          </div>
+          <div class="chap-info">
+            <div class="chap-title">${meta.title}</div>
+            <div class="chap-sub">${meta.pages ? meta.pages + ' trang • ' : ''}${meta.updated || ''}</div>
+            <a class="btn" href="${c.path}">📖 Đọc chương</a>
+          </div>`;
+        wrap.appendChild(el);
+      }
+    } catch(e){
+      document.getElementById('chapters').innerHTML = '<div class="error">Không load được danh sách chương.</div>';
+      console.error(e);
+    }
+  }
+  
+  loadChapters();
+  </script>
+  <script src="assets/global.js"></script>
+  <script>
+  // "#chapter-list" là id div chứa danh sách chap
+  showContinueReading("#chapter-list");
+</script>
+</body>
+</html>
