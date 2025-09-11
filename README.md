@@ -1,4 +1,5 @@
 # MangaVNteam
-<h2>lnk: https://usercat280297.github.io/MangaVNteam.github.io/</h2>
+<h2>lnk:</h2>
+<a href="http://usercat280297.github.io/MangaVNteam.github.io/">MangaVnteam</a>
 <p>note!: support for only view destop version</p>
 <h3>we're on development the verson, see ya'</h3>
