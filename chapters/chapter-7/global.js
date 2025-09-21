@@ -355,7 +355,7 @@ function createContinueButton() {
   try {
     saved = localStorage.getItem(`scroll-chapter-${chap}`);
   } catch {}
-  const y = saved ? parseInt(saved, 3) : NaN;
+  const y = saved ? parseInt(saved, 10) : NaN;
 
   if (isNaN(y) || y <= 0) return; // chưa có vị trí thì không hiện nút
 
@@ -468,7 +468,6 @@ function toggleAutoScroll(btn) {
 window.addEventListener("DOMContentLoaded", () => {
   createReaderToolbar();
 });
-
 // ==== THANH TIẾN ĐỘ ĐỌC ỔN ĐỊNH (VẠCH CHIA + HIGHLIGHT + CLICK) ====
 (function () {
   let io = null;                // IntersectionObserver
@@ -673,42 +672,6 @@ window.addEventListener("DOMContentLoaded", () => {
     updateUI();
   });
 })();
-// ==== TOGGLE ẨN/HIỆN UI NGOẠI TRỪ THANH PROGRESS ====
-(function () {
-  let uiHidden = false;
-
-  // Liệt kê tất cả UI cần ẩn/hiện khi đọc (trừ progress bar)
-  const uiSelectors = [
-    "#progress-label",     // nhãn % trang
-    "#dark-toggle",        // nút dark mode
-    "#scroll-toggle",      // nút auto scroll
-    "#shortcut-popup",     // popup hướng dẫn
-    "#continue-reading",   // nút tiếp tục đọc
-    "#corner-icon",
-    ".download-btn",
-    "#menuToggle"         // icon góc trái
-  ];
-
-  function toggleUI() {
-    uiHidden = !uiHidden;
-    uiSelectors.forEach(sel => {
-      document.querySelectorAll(sel).forEach(el => {
-        el.style.display = uiHidden ? "none" : "";
-      });
-    });
-  }
-
-  // Click nền (tránh click chính vào các UI)
-  document.addEventListener(
-    "click",
-    (e) => {
-      const ignoreWithin = uiSelectors.join(",");
-      if (ignoreWithin && e.target.closest(ignoreWithin)) return;
-      toggleUI();
-    },
-    true
-  );
-})();
 document.addEventListener("DOMContentLoaded", () => {
   const reader = document.getElementById("reader");
 
@@ -733,11 +696,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { rootMargin: "200px 0px" });
 
   // Cấu hình
-  const maxPages = 23;
+  const maxPages = 48;
   const loadingGif = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExejc3YXUwN2NpNWp4cXRzY3I5dXd0bjlldXhlODkzOTRidWdiaHR2dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gx54W1mSpeYMg/giphy.gif"; // đường dẫn gif load
 
   // Tạo ảnh placeholder gif + lazy load
-  for (let i = 0; i < maxPages; i++) {
+  for (let i = 1; i < maxPages; i++) {
     const placeholder = document.createElement("img");
     placeholder.src = loadingGif;
     placeholder.dataset.src = `pages/page-${String(i).padStart(3,'0')}.png`;
@@ -758,5 +721,3 @@ window.addEventListener("DOMContentLoaded", () => {
   if (prev) prev.onclick = (e) => { e.preventDefault(); navigateChapter(-1); };
   if (next) next.onclick = (e) => { e.preventDefault(); navigateChapter(1); };
 });
-
-
