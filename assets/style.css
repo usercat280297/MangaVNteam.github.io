@@ -443,5 +443,39 @@ body.reader {
   -ms-user-select: none;
   user-select: none;
 }
+.manga-grid {
+  display: flex;
+  gap: 40px;              /* khoảng cách giữa các truyện */
+  justify-content: center;
+  flex-wrap: wrap;        /* khi màn hình nhỏ sẽ tự xuống hàng */
+  margin-top: 20px;
+}
+
+.manga-item {
+  text-align: center;
+  max-width: 220px;
+}
+.subtitle-link {
+  display: inline-block;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  animation: fadeSlideUp .7s ease both;
+  animation-delay: .32s; /* trễ hơn tí so với title */
+  transition: color .2s ease;
+}
+
+.subtitle-link:hover {
+  color: #2b8fff; /* màu sáng hơn khi hover */
+}
+.flag-icon {
+  width: 20px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin: 0 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
 
 

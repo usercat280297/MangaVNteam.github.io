@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <!-- Fix chống nháy theme -->
+<script>
+  (function() {
+    try {
+      const key = "readerTheme";
+      let theme = localStorage.getItem(key);
+      if (!theme) {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-theme", theme);
+    } catch(e) {}
+  })();
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/png" href="../../assets/Screenshot 2025-08-26 175059.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const link = document.querySelector("link[rel='icon']");
+    if(link){
+      const img = document.createElement('img');
+      img.src = link.href;
+      img.className = 'favicon-home';
+      img.onclick = ()=>window.location.href="../../index.html";
+      document.body.appendChild(img);
+    }
+  });
+</script>
+<style>
+  .download-btn {
+    position: fixed;
+    right: 16px;
+    bottom: 70px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    z-index: 1500;
+    transition: background .2s ease;
+  }
+  .download-btn:hover {
+    background: #2b8fff;
+  }
+</style>
+</head>
+<body class="reader">
+  <div class="nav">
+    <a href="../../details.html">📚 Danh sách chương</a>
+    <div>
+      <a id="prev-chap" href="#">‹ Trước</a>
+      <a id="next-chap" href="#">Sau ›</a>
+    </div>
+  </div>
+  <div class="pages" id="reader"></div>
+  <button class="scroll-top" id="toTop">↑</button>
+  <button id="downloadAll" class="download-btn">⬇ Tải tất cả</button>
+
+<script>
+async function addImage(src){
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.className = 'page-img';
+    img.onload = ()=>{document.getElementById('reader').appendChild(img);resolve(true)};
+    img.onerror = ()=>resolve(false);
+    img.src = src;
+  });
+}
+(async function(){
+  { 
+    <div id="reader"></div>
+  }
+})();
+
+window.addEventListener('scroll',()=>{
+  const toTop=document.getElementById('toTop');
+  if(window.scrollY>200) toTop.classList.add('show');
+  else toTop.classList.remove('show');
+});
+document.getElementById('toTop').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+
+// nút tải tất cả ảnh -> zip
+ document.getElementById('downloadAll').onclick = async () => {
+   const zip = new JSZip();
+   const folder = zip.folder("chapter");
+   const imgs = document.querySelectorAll('.page-img');
+
+   for (let i = 0; i < imgs.length; i++) {
+     const url = imgs[i].src;
+     const response = await fetch(url);
+     const blob = await response.blob();
+     folder.file(`page-${String(i+1).padStart(3,'0')}.png`, blob);
+   }
+
+   zip.generateAsync({type:"blob"}).then(function(content) {
+     saveAs(content, "chapter.zip");
+   });
+ };
+</script>
+<script src="global.js"></script>
+<!-- Menu + Chế độ đọc + Điều khiển PC/Mobile -->
+<style>
+  #menuToggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1600;
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  #menuOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 60px;
+    z-index: 1599;
+  }
+  #menuOverlay .menu-box {
+    background: var(--bg);
+    padding: 16px;
+    border-radius: 12px;
+    max-height: 70%;
+    overflow-y: auto;
+    width: 280px;
+    color: var(--text);
+  }
+  #chapterList a {
+    display: block;
+    padding: 6px 0;
+    border-bottom: 1px solid #ddd;
+    color: var(--text);
+    text-decoration: none;
+  }
+  #chapterList a:hover {
+    color: var(--accent);
+  }
+</style>
+
+<button id="menuToggle">☰ Menu</button>
+<div id="menuOverlay">
+  <div class="menu-box">
+    <h3>📖 Danh sách chương</h3>
+    <div id="chapterList"></div>   
+ </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const menuToggle = document.getElementById("menuToggle");
+  const menuOverlay = document.getElementById("menuOverlay");
+  const chapterList = document.getElementById("chapterList");
+
+  // mở / đóng menu
+  menuToggle.onclick = () => menuOverlay.style.display = "flex";
+  menuOverlay.onclick = e => { if(e.target === menuOverlay) menuOverlay.style.display = "none"; };
+
+  // load danh sách chương (ví dụ 10 chương, bạn thay link thật vào đây)
+  
+
+  // toggle chế độ đọc
+  
+  // nếu đang ở chế độ ngang thì chỉ hiển thị 1 ảnh 1 lần
+  let currentIndex = 0;
+  const pages = ()=>Array.from(document.querySelectorAll('.page-img'));
+  function showPage(i){
+    const imgs=pages();
+    if(i<0||i>=imgs.length) return;
+    currentIndex=i;
+    imgs.forEach((img,idx)=>img.style.display = (idx===i?"block":"none"));
+  }
+
+  // PC + Mobile điều khiển
+  function nextPage(){showPage(currentIndex+1);}
+  function prevPage(){showPage(currentIndex-1);}
+
+  document.addEventListener("keydown", e=>{
+    if(!document.body.classList.contains("horizontal")) return;
+    if(e.key==="ArrowRight") nextPage();
+    if(e.key==="ArrowLeft") prevPage();
+  });
+
+  document.addEventListener("click", e=>{
+    if(!document.body.classList.contains("horizontal")) return;
+    if(e.target.closest("#menuOverlay")||e.target.closest("#menuToggle")) return;
+    const x=e.clientX||(e.touches&&e.touches[0].clientX);
+    if(!x) return;
+    if(x<window.innerWidth/2) prevPage();
+    else nextPage();
+  });
+
+  // mặc định dọc (hiện tất cả ảnh), khi đổi sang ngang thì reset về ảnh đầu tiên
+document.querySelector('input[value="horizontal"]').addEventListener("change",()=>{
+  document.body.classList.add("horizontal");
+  document.body.classList.remove("vertical");
+  currentIndex = 0;
+  showPage(currentIndex);
+});
+
+document.querySelector('input[value="vertical"]').addEventListener("change",()=>{
+  document.body.classList.add("vertical");
+  document.body.classList.remove("horizontal");
+  pages().forEach(img => img.style.display = "block");
+});
+});
+</script>
+<!-- Override vị trí nút Menu: kéo xuống dưới để không đè nav -->
+<style>
+  /* đẩy nút xuống, tránh đè chữ ‹ Trước */
+  #menuToggle{
+    top: auto !important;
+    bottom: 120px !important;   /* chỉnh số này theo ý bạn */
+    right: 16px !important;
+  }
+  @media (max-width: 600px){
+    #menuToggle{ bottom: 100px !important; }
+  }
+</style>
+<script>
+/* FIX link danh sách chương để không 404 trên GitHub Pages */
+(function fixChapterLinksAndMenuPos(){
+  // 1) Rebuild danh sách chương đúng đường dẫn thư mục (index.html ngầm định)
+  const list = document.getElementById('chapterList');
+  if (list) {
+    const TOTAL = 6; // <-- sửa số chap thật
+    list.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const a = document.createElement('a');
+      // Nếu folder của bạn là chapter-1, chapter-2,... dùng dòng dưới:
+      a.href = `../chapter-${i}/`;
+      // Nếu folder là chapter-001, chapter-002,... thì dùng:
+      // const num = String(i).padStart(3,'0'); a.href = `../chapter-${num}/`;
+
+      a.textContent = `Chương ${i}`;
+      list.appendChild(a);
+    }
+  }
+
+  // 2) (phòng khi style inline cũ đang đặt top) – ép nút Menu dùng bottom
+  const btn = document.getElementById('menuToggle');
+  if (btn) {
+    btn.style.top = '';
+    btn.style.bottom = '120px'; // khớp với CSS trên
+    btn.style.right = '16px';
+  }
+})();
+</script>
+<!-- Nút đổi chế độ đọc -->
+<div id="readingModeBtn">
+  <span>📖</span>
+</div>
+
+<!-- Popup chọn chế độ -->
+
+<!-- Overlay mờ -->
+<div id="readingModeOverlay"></div>
+
+<!-- Popup đọc -->
+<div id="readingModePopup">
+  <span id="closePopup">&times;</span>
+  <h2>Chọn chế độ đọc</h2>
+  <label><input type="radio" name="mode" value="vertical" checked> Dọc</label><br>
+  <label><input type="radio" name="mode" value="horizontal"> Ngang</label>
+</div>
+
+<script>
+
+const readingModeBtn = document.getElementById("readingModeBtn");
+const readingModePopup = document.getElementById("readingModePopup");
+const readingModeOverlay = document.getElementById("readingModeOverlay");
+const closePopup = document.getElementById("closePopup");
+
+// mở popup
+readingModeBtn.addEventListener("click", () => {
+  readingModePopup.style.display = "block";
+  readingModeOverlay.style.display = "block";
+});
+
+// đóng popup
+closePopup.addEventListener("click", () => {
+  readingModePopup.style.display = "none";
+  readingModeOverlay.style.display = "none";
+});
+
+readingModeOverlay.addEventListener("click", () => {
+  readingModePopup.style.display = "none";
+  readingModeOverlay.style.display = "none";
+});
+
+</script>
+
+</body>
+</html>

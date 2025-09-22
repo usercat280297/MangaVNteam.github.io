@@ -696,7 +696,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { rootMargin: "200px 0px" });
 
   // Cấu hình
-  const maxPages = 48;
+  const maxPages = 45;
   const loadingGif = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExejc3YXUwN2NpNWp4cXRzY3I5dXd0bjlldXhlODkzOTRidWdiaHR2dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gx54W1mSpeYMg/giphy.gif"; // đường dẫn gif load
 
   // Tạo ảnh placeholder gif + lazy load
